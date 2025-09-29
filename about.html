@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Rachael Emmanuel Foundation</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons for aesthetic icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc;
+        }
+        .nav-link:hover {
+            color: #ec4899;
+        }
+        .active-link {
+            color: #f97316; /* Orange 600 */
+            font-weight: 600;
+        }
+        .modal {
+            transition: opacity 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Donation Modal (Consistent across all pages) -->
+    <div id="donationModal" class="modal fixed inset-0 bg-gray-900 bg-opacity-80 backdrop-blur-sm z-50 flex items-center justify-center opacity-0 pointer-events-none">
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl max-w-lg mx-4 w-full transform transition-all duration-300 scale-95">
+            <div class="text-center">
+                <i data-lucide="piggy-bank" class="w-12 h-12 text-orange-600 mx-auto mb-4"></i>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Support Our Mission</h3>
+                <p class="text-gray-600 mb-6">Thank you for choosing to donate! Please use the bank details below for a secure transfer.</p>
+
+                <!-- Bank Details Box -->
+                <div class="bg-gray-50 p-4 sm:p-6 rounded-lg border border-gray-200 text-left">
+                    <p class="text-sm font-semibold text-gray-500 mb-2 uppercase">Bank Transfer Details</p>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center border-b border-dashed pb-2">
+                            <span class="font-medium text-gray-700">Bank Name:</span>
+                            <span class="font-bold text-orange-600">Zenith Bank PLC</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-dashed pb-2">
+                            <span class="font-medium text-gray-700">Account Name:</span>
+                            <span class="font-bold text-orange-600">Rachael Emmanuel Foundation</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium text-gray-700">Account No:</span>
+                            <span id="accountNumber" class="font-bold text-pink-600 text-xl tracking-wider">1234567890</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="mt-6 space-y-3 sm:space-y-0 sm:flex sm:space-x-3">
+                    <button onclick="copyAccountNo()" class="w-full sm:w-1/2 px-4 py-2 bg-pink-600 text-white font-semibold rounded-lg shadow-md hover:bg-pink-700 transition duration-150 flex items-center justify-center">
+                        <i data-lucide="copy" class="w-5 h-5 mr-2"></i> Copy Account No
+                    </button>
+                    <button onclick="hideModal()" class="w-full sm:w-1/2 px-4 py-2 border border-gray-300 text-gray-700 font-semibold rounded-lg shadow-md hover:bg-gray-100 transition duration-150 flex items-center justify-center">
+                        <i data-lucide="x" class="w-5 h-5 mr-2"></i> Close
+                    </button>
+                </div>
+                
+                <p id="copyNotification" class="text-sm text-green-600 mt-3 h-4 opacity-0 transition-opacity duration-300">Account number copied!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4 md:justify-start md:space-x-10">
+                <!-- Logo/Brand -->
+                <div class="flex justify-start lg:w-0 lg:flex-1">
+                    <a href="index.html" class="text-2xl font-extrabold text-orange-600">REF</a>
+                    <span class="ml-2 text-xl font-medium text-gray-700 hidden sm:block">About Us</span>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex space-x-10">
+                    <a href="index.html" class="text-base font-medium text-gray-500 nav-link">Home</a>
+                    <a href="#" class="text-base font-medium text-gray-500 active-link">About Us</a>
+                    <a href="gallery.html" class="text-base font-medium text-gray-500 nav-link">Gallery</a>
+                    <a href="index.html#contact" class="text-base font-medium text-gray-500 nav-link">Contact</a>
+                </nav>
+
+                <!-- CTA Button -->
+                <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+                    <button onclick="showModal()" class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-pink-600 hover:bg-pink-700 transition duration-300">
+                        Donate Now
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobileMenuButton" class="bg-white p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-orange-500 rounded-lg">
+                        <span class="sr-only">Open main menu</span>
+                        <i data-lucide="menu" class="h-6 w-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobileMenu" class="md:hidden absolute w-full top-full left-0 bg-white shadow-lg py-2 transition-all duration-300 max-h-0 overflow-hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-orange-600">Home</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-orange-600 font-semibold bg-gray-50">About Us</a>
+                <a href="gallery.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-orange-600">Gallery</a>
+                <a href="index.html#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-orange-600">Contact</a>
+            </div>
+            <div class="pt-4 pb-3 border-t border-gray-200">
+                <div class="px-5">
+                    <button onclick="showModal()" class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-pink-600 hover:bg-pink-700 transition duration-300">
+                        Donate Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- About Hero Section -->
+        <section class="bg-white pt-16 pb-12 sm:pt-24 sm:pb-16 text-center">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <p class="text-sm font-semibold uppercase text-pink-600 tracking-wide mb-2">Our Story, Our Purpose</p>
+                <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl lg:text-6xl">
+                    <span class="block">The <span class="text-orange-600">Heart</span> Behind the Help</span>
+                </h1>
+                <p class="mt-4 text-xl text-gray-600 max-w-3xl mx-auto">
+                    We are driven by a singular goal: restoring hope, dignity, and self-reliance to vulnerable women and children.
+                </p>
+            </div>
+        </section>
+
+        <!-- Mission, Vision, Values -->
+        <section class="py-16 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="lg:grid lg:grid-cols-3 lg:gap-12">
+                    
+                    <!-- Mission -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg mb-8 lg:mb-0 transform hover:shadow-xl transition duration-300">
+                        <i data-lucide="target" class="w-8 h-8 text-pink-600 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">Our Mission</h3>
+                        <p class="text-gray-600">To actively empower widows through sustainable vocational training and micro-grants, while ensuring the safety, education, and welfare of orphans and vulnerable children in our communities.</p>
+                    </div>
+
+                    <!-- Vision -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg mb-8 lg:mb-0 transform hover:shadow-xl transition duration-300">
+                        <i data-lucide="eye" class="w-8 h-8 text-orange-600 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">Our Vision</h3>
+                        <p class="text-gray-600">A society where no woman or child is left behind due to circumstance; a future where every individual we support is self-reliant, healthy, and educated.</p>
+                    </div>
+
+                    <!-- Values -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg transform hover:shadow-xl transition duration-300">
+                        <i data-lucide="heart-handshake" class="w-8 h-8 text-purple-600 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">Core Values</h3>
+                        <ul class="text-gray-600 list-disc list-inside space-y-1">
+                            <li><span class="font-semibold text-gray-800">Dignity:</span> Treating all beneficiaries with utmost respect.</li>
+                            <li><span class="font-semibold text-gray-800">Sustainability:</span> Focusing on long-term empowerment, not just handouts.</li>
+                            <li><span class="font-semibold text-gray-800">Integrity:</span> Operating with transparency and financial accountability.</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Founder's Story Section -->
+        <section class="py-16 sm:py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+                    
+                    <!-- Image Placeholder -->
+                    <div class="mb-10 lg:mb-0">
+                        <img src="https://placehold.co/800x800/fecdd3/9f1239?text=Rachael+Emmanuel" alt="A professional portrait of the Founder, Rachael Emmanuel" class="w-full h-auto rounded-xl shadow-2xl object-cover" onerror="this.onerror=null;this.src='https://placehold.co/800x800/fecdd3/9f1239?text=Rachael+Emmanuel';"/>
+                    </div>
+
+                    <!-- Story Content -->
+                    <div>
+                        <p class="text-sm font-semibold uppercase text-orange-600 tracking-wide mb-3">Meet the Visionary</p>
+                        <h2 class="text-4xl font-extrabold text-gray-900 mb-6">A Call to Service: Rachael Emmanuel</h2>
+                        
+                        <p class="text-lg text-gray-700 mb-6">
+                            The Rachael Emmanuel Foundation (REF) was born from a deep, personal commitment by its founder, **Rachael Emmanuel**. Having witnessed the immense struggles of widows and fatherless children in her local community, Rachael felt a spiritual and social imperative to act.
+                        </p>
+                        
+                        <p class="text-lg text-gray-700 mb-6">
+                            She understood that charity alone was not enough; true change required equipping individuals with the tools to rebuild their lives. Starting with a single tailoring machine in her home, the foundation quickly grew, powered by the belief that empowerment is the pathway to dignity.
+                        </p>
+
+                        <p class="text-lg font-bold text-pink-600 border-l-4 border-pink-600 pl-4 italic">
+                            "Every woman deserves the chance to stand on her own, and every child deserves a safe path to a brighter future. This is the promise we keep every single day."
+                        </p>
+
+                        <div class="mt-8 flex space-x-4">
+                            <i data-lucide="hand-heart" class="w-8 h-8 text-pink-600"></i>
+                            <i data-lucide="graduation-cap" class="w-8 h-8 text-orange-600"></i>
+                            <i data-lucide="hospital" class="w-8 h-8 text-purple-600"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Final CTA Section (Consistent with other pages) -->
+        <section class="bg-orange-600 py-16 text-white text-center">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold mb-4">Join Our Journey of Transformation</h2>
+                <p class="text-lg opacity-90 mb-8">
+                    Read the stories of impact in our gallery or contribute directly to our programs.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="gallery.html" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg shadow-lg text-orange-600 bg-white hover:bg-gray-100 transition duration-300 transform hover:scale-105">
+                        View Our Gallery
+                        <i data-lucide="images" class="ml-2 h-5 w-5"></i>
+                    </a>
+                    <button onclick="showModal()" class="inline-flex items-center justify-center px-8 py-3 border border-white text-base font-medium rounded-lg shadow-lg text-white bg-pink-600 hover:bg-pink-700 transition duration-300 transform hover:scale-105">
+                        Donate Today
+                        <i data-lucide="piggy-bank" class="ml-2 h-5 w-5"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-400 text-sm">
+                &copy; <span id="currentYearFooter"></span> Rachael Emmanuel Foundation. <br> Motto: In God We Trust.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Navigation Toggle Logic ---
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true' || false;
+            
+            if (!isExpanded) {
+                mobileMenu.style.maxHeight = "400px"; // Use a fixed height for smooth transition
+                mobileMenuButton.setAttribute('aria-expanded', 'true');
+            } else {
+                mobileMenu.style.maxHeight = '0';
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Ensure links close the menu when clicked
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.style.maxHeight = '0';
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // --- Donation Modal Logic (Copied for consistency) ---
+        const modal = document.getElementById('donationModal');
+        const copyNotification = document.getElementById('copyNotification');
+
+        function showModal() {
+            modal.classList.remove('pointer-events-none', 'opacity-0', 'scale-95');
+            modal.classList.add('opacity-100', 'scale-100');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+            copyNotification.classList.add('opacity-0'); // Reset notification on open
+        }
+
+        function hideModal() {
+            modal.classList.remove('opacity-100', 'scale-100');
+            modal.classList.add('pointer-events-none', 'opacity-0', 'scale-95');
+            document.body.style.overflow = 'auto';
+        }
+
+        function copyAccountNo() {
+            const accountNumberElement = document.getElementById('accountNumber');
+            const accountNumber = accountNumberElement.textContent;
+
+            // Use execCommand for copying as navigator.clipboard might fail in some contexts (like iframes)
+            const el = document.createElement('textarea');
+            el.value = accountNumber;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            // Show confirmation notification
+            copyNotification.classList.remove('opacity-0');
+            setTimeout(() => {
+                copyNotification.classList.add('opacity-0');
+            }, 2000);
+        }
+
+        // --- Initialization ---
+        window.onload = function() {
+            // Set current year in the footer
+            document.getElementById('currentYearFooter').textContent = new Date().getFullYear();
+        }
+    </script>
+</body>
+</html>
